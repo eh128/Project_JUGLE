@@ -36,6 +36,15 @@ const getImage = (key) => {
   return s3.getObject(downloadParams).createReadStream();
 };
 
+const deleteImage = (key) => {
+  const deleteParams = {
+    Key: key,
+    Bucket: bucketName,
+  };
+  return s3.deleteObject(deleteParams).promise();
+};
+
 //export functions
+exports.deleteImage = deleteImage;
 exports.getImage = getImage;
 exports.uploadFile = uploadFile;

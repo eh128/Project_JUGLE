@@ -37,13 +37,13 @@ const CreateForm = ({ school }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(school),
-      }).then(() => {
-        //return to Home page
-        history.push("/");
       });
       fetch("/images", {
         method: "POST",
         body: formData,
+      }).then(() => {
+        //return to Home page
+        history.push("/");
       });
     } catch (error) {
       console.error(error.message);
@@ -53,11 +53,15 @@ const CreateForm = ({ school }) => {
     e.preventDefault();
     try {
       const school = { school_name: name, about };
+      const formData = new FormData();
+      formData.append("image", image);
       fetch(`/schools/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(school),
-      }).then(() => {
+      });
+      fetch(`/images/${id}`, { method: "DELETE" });
+      fetch(`/images/${id}`, { method: "POST", body: formData }).then(() => {
         //return to Home page
         history.push("/");
       });
@@ -73,6 +77,7 @@ const CreateForm = ({ school }) => {
         <input
           type="text"
           value={name}
+          required
           onChange={(e) => {
             setName(e.target.value);
           }}
@@ -91,9 +96,10 @@ const CreateForm = ({ school }) => {
         <input
           type="file"
           accept="image/*"
+          required
           onChange={(e) => setImage(e.target.files[0])}
         />
-        <button>{school ? "Update" : "Create"}</button>
+        <button>{school ? "Update" : "Submit"}</button>
       </form>
     </div>
   );

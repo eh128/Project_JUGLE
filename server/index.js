@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const pool = require("./storage/db");
 const multer = require("multer");
-const { uploadFile, getImage } = require("./storage/s3");
+const { uploadFile, getImage, deleteImage } = require("./storage/s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
@@ -18,13 +18,14 @@ app.use(express.json());
 //get list of all schools
 app.get("/schools", async (req, res) => {
   try {
-    const schools = await pool.query("SELECT * FROM schools");
+    const schools = await pool.query("SELECT * FROM schools ORDER BY id DESC");
     res.json(schools.rows);
   } catch (error) {
     console.error(error.message);
   }
 });
 
+//get image from S3
 app.get("/images/:id", async (req, res) => {
   try {
     const image_path = await pool.query(
@@ -36,24 +37,14 @@ app.get("/images/:id", async (req, res) => {
   } catch (error) {
     console.error(error);
   }
-
-  // key = image_path.rows[0].image_path;
-  // const downloadParams = {
-  //   Key: key,
-  //   Bucket: process.env.AWS_BUCKET_NAME,
-  // };
-  // s3.getObject(downloadParams, (error, data) => {
-  //   if (error) console.log(error);
-  //   console.log(data.Body);
-  //   res.send(data.Body);
-  // });
 });
 
 //get a specific school
 app.get("/schools/:id", async (req, res) => {
   try {
+    const { id } = req.params;
     const school = await pool.query("SELECT * FROM schools WHERE id = $1", [
-      req.params.id,
+      id,
     ]);
     res.json(school.rows[0]);
   } catch (error) {
@@ -70,11 +61,12 @@ app.post("/schools", async (req, res) => {
       [school_name, about]
     );
     res.json(newSchool.rows[0]);
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.message);
   }
 });
 
+//upload image to S3
 app.post("/images", upload.single("image"), async (req, res) => {
   try {
     const image = req.file;
@@ -93,16 +85,50 @@ app.post("/images", upload.single("image"), async (req, res) => {
 //edit a specific school
 app.put("/schools/:id", async (req, res) => {
   try {
-    // const { id } = req.params;
+    const { id } = req.params;
     const { school_name, about } = req.body;
     const updateSchool = await pool.query(
       "UPDATE schools SET school_name = $1, about = $2 WHERE id = $3 RETURNING *",
-      [school_name, about, req.params.id]
+      [school_name, about, id]
     );
     res.json("School updated");
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error.message);
   }
 });
+
+//delete image and then post new image
+app.delete("/images/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const image_path = await pool.query(
+      "SELECT image_path FROM schools WHERE id = $1",
+      [id]
+    );
+    deleteImage(image_path.rows[0].image_path.toString());
+    res.send("Image deleted");
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+app.post("/images/:id", upload.single("image"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const image = req.file;
+    const result = await uploadFile(image);
+    await unlinkFile(image.path);
+    const newImagePath = await pool.query(
+      "UPDATE schools SET image_path = $1 WHERE id = $2",
+      [result.Key, id]
+    );
+    res.send({ imagePath: `/images/${result.Key}` });
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+//delete image
+//post new image in new route "images/:id" and add new image path to database
 
 app.listen(process.env.PORT);
