@@ -17,10 +17,16 @@ const School = ({ school }) => {
   }, []);
 
   return (
-    <div>
-      <div>{school.school_name}</div>
-      <div>{school.about}</div>
-      <img src={imagePath} alt={`Image of ${school.school_name}`} />
+    <div className="school-container">
+      <img
+        className="images"
+        src={imagePath}
+        alt={`Image of ${school.school_name}`}
+      />
+      <div className="description-container">
+        <h2>{school.school_name}</h2>
+        <p>{school.about}</p>
+      </div>
     </div>
   );
 };

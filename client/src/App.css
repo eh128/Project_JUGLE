@@ -1,3 +1,180 @@
-.text-field {
+:root {
+  --color-text-dark: rgb(97, 58, 204);
+  --color-text-normal: rgb(10, 10, 10);
+  --color-background: rgba(194, 178, 240, 0.3);
+  --color-border: rgb(208, 196, 243);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.link {
+  text-decoration: none;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 5vh;
+  background-color: var(--color-background);
+  padding: 3% 0 1%;
+  /* height:  */
+  border-bottom: 1px solid var(--color-border);
+}
+.header > h1 {
+  color: var(--color-text-dark);
+  font-style: italic;
+}
+.nav-container {
+  display: flex;
+  align-items: flex-end;
+}
+.nav-container > a {
+  margin-left: 5vw;
+  font-size: 1.3em;
+  text-decoration: none;
+  color: var(--color-text-dark);
+  font-weight: 600;
+}
+
+/* School List */
+.schools-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  align-items: center;
+}
+.school-container {
+  display: flex;
+  max-width: 90vw;
+  border: 1px solid var(--color-border);
+  border-radius: 15px;
+  margin-bottom: 2rem;
+}
+.school-container:hover {
+  background-color: var(--color-background);
+}
+.school-container > img {
+  width: 30vw;
+  height: auto;
+  border-radius: 15px;
+}
+.description-container {
+  display: flex;
+  flex-direction: column;
+  margin: 3% 2%;
+  flex-grow: 1;
+  color: var(--color-text-normal);
+}
+.description-container > h2 {
+  margin-bottom: 1.2rem;
+  text-decoration: none;
+  font-size: 1.4em;
+}
+
+/* School detail page */
+.details-container {
+  display: flex;
+  margin: 0 auto;
+  justify-content: space-around;
+  max-width: 90vw;
+  padding: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 10px;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+}
+.column-left > img {
+  width: 40vw;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+.update-btn {
+  color: var(--color-text-dark);
+  background-color: var(--color-background);
+  font-size: 1.6em;
+  font-weight: 600;
+  border: 3px solid var(--color-border);
+  border-radius: 5px;
+  text-align: center;
+}
+.column-right {
+  align-items: center;
+  margin-top: 5%;
+  width: 48%;
+}
+.column-right > h2 {
+  color: var(--color-text-dark);
+  font-size: 2em;
+}
+.column-right > p {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+/* Form */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 90vw;
+  margin: 0 auto;
+  padding: 3rem 2.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  /* background-color: green; */
+}
+.form {
+  margin-top: 1rem;
+}
+.row {
+  display: flex;
+  /* background-color: red; */
+  margin-bottom: 20px;
+}
+.row input {
+  /* height: 3rem; */
+}
+.row input,
+.row textarea {
+  font-size: 1.4em;
+  padding: 0.4em 0.5em;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  outline: none;
+  flex-grow: 3;
+  width: 25%;
+}
+.row label {
+  font-weight: 600;
+  font-size: 1.3em;
+  flex-grow: 1;
+}
+#file {
+  padding: 0;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+.row > textarea {
   resize: vertical;
+  font-size: 1.5em;
+  height: 150px;
+}
+.form > button {
+  color: var(--color-text-dark);
+  background-color: var(--color-background);
+  border: 3px solid var(--color-border);
+  border-radius: 50px;
+  font-size: 1.3em;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  float: right;
 }

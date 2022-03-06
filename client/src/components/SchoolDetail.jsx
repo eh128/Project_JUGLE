@@ -27,20 +27,20 @@ const SchoolDetail = () => {
   }, []);
 
   return (
-    <div>
-      <div>{school.school_name}</div>
-      <div>{school.about}</div>
-      <img src={imagePath} alt="" />
-      <Link
-        to={{
-          pathname: `/schools/${school.id}/update`,
-          state: {
-            school,
-          },
-        }}
-      >
-        Update
-      </Link>
+    <div className="details-container">
+      <div className="column column-left">
+        <img src={imagePath} alt={`Image of ${school.school_name}`} />
+        <Link
+          className="update-btn link"
+          to={{ pathname: `/schools/${school.id}/update`, state: { school } }}
+        >
+          Update
+        </Link>
+      </div>
+      <div className="column column-right">
+        <h2>{school.school_name}</h2>
+        <p>{school.about}</p>
+      </div>
     </div>
   );
 };

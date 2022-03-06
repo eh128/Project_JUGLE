@@ -22,11 +22,7 @@ const CreateForm = ({ school }) => {
   const history = useHistory();
   const { id } = useParams();
 
-  // const postImage = async ({image})=>{
-
-  // }
-
-  // make post request once the form is submitted
+  // make post request if the form is for creating school
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -49,6 +45,8 @@ const CreateForm = ({ school }) => {
       console.error(error.message);
     }
   };
+
+  // make put request the form is used for updating school
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -71,34 +69,41 @@ const CreateForm = ({ school }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={school ? handleUpdate : handleSubmit}>
-        <label>School Name</label>
-        <input
-          type="text"
-          value={name}
-          required
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-        />
-        <label>About</label>
-        <textarea
-          className="text-field"
-          cols="20"
-          rows="5"
-          value={about}
-          onChange={(e) => {
-            setAbout(e.target.value);
-          }}
-        ></textarea>
-        <label>Image</label>
-        <input
-          type="file"
-          accept="image/*"
-          required
-          onChange={(e) => setImage(e.target.files[0])}
-        />
+    <div className="form-container">
+      <h1>Create a listing</h1>
+      <form className="form" onSubmit={school ? handleUpdate : handleSubmit}>
+        <div className="row">
+          <label>Name</label>
+          <input
+            type="text"
+            value={name}
+            required
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
+        </div>
+        <div className="row">
+          <label>About</label>
+          <textarea
+            cols="20"
+            rows="5"
+            value={about}
+            onChange={(e) => {
+              setAbout(e.target.value);
+            }}
+          ></textarea>
+        </div>
+        <div className="row">
+          <label>Image</label>
+          <input
+            id="file"
+            type="file"
+            accept="image/*"
+            required
+            onChange={(e) => setImage(e.target.files[0])}
+          />
+        </div>
         <button>{school ? "Update" : "Submit"}</button>
       </form>
     </div>

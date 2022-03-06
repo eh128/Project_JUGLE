@@ -20,10 +20,10 @@ const SchoolsList = () => {
   }, []);
 
   return (
-    <div>
+    <div className="schools-container">
       {schools.map((school) => (
         <div key={school.id}>
-          <Link to={`/schools/${school.id}`}>
+          <Link className="link" to={`/schools/${school.id}`}>
             <School school={school}></School>
           </Link>
         </div>
