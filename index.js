@@ -134,7 +134,7 @@ app.post("/images/:id", upload.single("image"), async (req, res) => {
 
 //for deployment
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("../client/build"));
+  app.use(express.static("client/build"));
 }
 
 app.listen(process.env.PORT);
