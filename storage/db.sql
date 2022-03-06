@@ -11,6 +11,7 @@ CREATE TABLE schools (
 --add image_path column
 ALTER TABLE schools ADD COLUMN image_path VARCHAR(255);
 
+--create new table with all required columns
 -- CREATE TABLE schools (
 --     id SERIAL NOT NULL PRIMARY KEY,
 --     school_name VARCHAR(255) NOT NULL,
