@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-//import detail page component
-// import DetailPage from "../routes/DetailPage";
 import School from "./School";
 
 const SchoolsList = () => {
+  //declare state
   const [schools, setSchools] = useState([]);
 
   //get array of all schools

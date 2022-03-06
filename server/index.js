@@ -1,21 +1,23 @@
-require("dotenv").config();
-
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 const express = require("express");
 const cors = require("cors");
 const pool = require("./storage/db");
 const multer = require("multer");
-const { uploadFile, getImage, deleteImage } = require("./storage/s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
 const upload = multer({ dest: "uploads/" });
 
-const app = express();
+//import functions for S3 images
+const { uploadFile, getImage, deleteImage } = require("./storage/s3");
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-//get list of all schools
+//get list of all schools (decending order by id)
 app.get("/schools", async (req, res) => {
   try {
     const schools = await pool.query("SELECT * FROM schools ORDER BY id DESC");
@@ -28,9 +30,10 @@ app.get("/schools", async (req, res) => {
 //get image from S3
 app.get("/images/:id", async (req, res) => {
   try {
+    const { id } = req.params;
     const image_path = await pool.query(
       "SELECT image_path FROM schools WHERE id = $1",
-      [req.params.id]
+      [id]
     );
     const readStream = getImage(image_path.rows[0].image_path.toString());
     readStream.pipe(res);
@@ -66,7 +69,7 @@ app.post("/schools", async (req, res) => {
   }
 });
 
-//upload image to S3
+//upload image to S3 and store image path in database
 app.post("/images", upload.single("image"), async (req, res) => {
   try {
     const image = req.file;
@@ -97,7 +100,7 @@ app.put("/schools/:id", async (req, res) => {
   }
 });
 
-//delete image and then post new image
+//delete image and then post new image (update the image)
 app.delete("/images/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -112,6 +115,7 @@ app.delete("/images/:id", async (req, res) => {
   }
 });
 
+//post image for specific school and store the image path in the database
 app.post("/images/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
@@ -127,8 +131,5 @@ app.post("/images/:id", upload.single("image"), async (req, res) => {
     console.error(error.message);
   }
 });
-
-//delete image
-//post new image in new route "images/:id" and add new image path to database
 
 app.listen(process.env.PORT);

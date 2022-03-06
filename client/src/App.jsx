@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 //css
 import "./App.css";
 
-//components
+//import components
 import HomePage from "./routes/HomePage";
 import SubmitPage from "./routes/SubmitPage";
 import DetailPage from "./routes/DetailPage";

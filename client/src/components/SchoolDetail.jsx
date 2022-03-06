@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 const SchoolDetail = () => {
   const { id } = useParams();
 
+  //declare states
   const [school, setSchool] = useState({});
   const [imagePath, setImagePath] = useState("");
 
@@ -13,6 +14,8 @@ const SchoolDetail = () => {
       .then((response) => response.json())
       .then((data) => setSchool(data));
   };
+
+  //get image from the server
   const getImage = () => {
     fetch(`/images/${id}`)
       .then((response) => response.blob())

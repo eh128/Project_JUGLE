@@ -22,7 +22,7 @@ const CreateForm = ({ school }) => {
   const history = useHistory();
   const { id } = useParams();
 
-  // make post request if the form is for creating school
+  // make post request if the form is for creating a new school
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -34,6 +34,7 @@ const CreateForm = ({ school }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(school),
       });
+      //add image
       fetch("/images", {
         method: "POST",
         body: formData,
@@ -46,7 +47,7 @@ const CreateForm = ({ school }) => {
     }
   };
 
-  // make put request the form is used for updating school
+  // make put request if the form is used for updating an existing school
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -58,6 +59,7 @@ const CreateForm = ({ school }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(school),
       });
+      //delete the image from S3 and replace it with the new image file
       fetch(`/images/${id}`, { method: "DELETE" });
       fetch(`/images/${id}`, { method: "POST", body: formData }).then(() => {
         //return to Home page

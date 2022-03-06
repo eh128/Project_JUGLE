@@ -1,5 +1,6 @@
-require("dotenv").config();
-// const S3 = require("aws-sdk/clients/s3");
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 const AWS = require("aws-sdk");
 const fs = require("fs");
 
@@ -18,6 +19,7 @@ AWS.config.update({
 });
 const s3 = new AWS.S3();
 
+//upload image to S3
 const uploadFile = (image) => {
   const fileStream = fs.createReadStream(image.path);
   const uploadParams = {
@@ -28,6 +30,7 @@ const uploadFile = (image) => {
   return s3.upload(uploadParams).promise();
 };
 
+//get image from S3
 const getImage = (key) => {
   const downloadParams = {
     Key: key,
@@ -36,6 +39,7 @@ const getImage = (key) => {
   return s3.getObject(downloadParams).createReadStream();
 };
 
+//delete image on S3
 const deleteImage = (key) => {
   const deleteParams = {
     Key: key,

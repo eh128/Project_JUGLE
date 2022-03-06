@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 
 const School = ({ school }) => {
+  //declare image state
   const [imagePath, setImagePath] = useState("");
 
+  //get image from the server
   const getImage = () => {
     fetch(`/images/${school.id}`)
       .then((response) => response.blob())
@@ -12,7 +14,6 @@ const School = ({ school }) => {
   };
 
   useEffect(() => {
-    // getSchool();
     getImage();
   }, []);
 
